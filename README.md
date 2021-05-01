@@ -62,7 +62,7 @@ Ahora creamos nuestro archivo de configuración llamado ***.babelrc*** en la ra�
 {
     "presets": [
         "@babel/preset-env",   // Nos permite compilar todo tipo de js desde ecmascript 5
-        "babel/preset-react"   // Nos ayuda con la sintaxis de react
+        "@babel/preset-react"   // Nos ayuda con la sintaxis de react
     ]
 }
 ````
@@ -122,3 +122,55 @@ module.exports = {
     }
 }
 ````
+
+
+## Sección V - HTML con Webpack
+
+Necesitamos el loader y el plugin para comenzar a trabajar con html y poder probar nuestro proyecto.
+
+Para esto necesitaremos las siguientes dependencias para desarrollo con la bandera ***-D***:
+
+**dependencias:**
+
+- html-loader
+- html-webpack-plugin 
+
+````
+npm i html-loader html-webpack-plugin -D
+````
+En nuestro archivo de configuración ***webpack.config.js*** vamos a configurar el loader y el plugin para hacer uso de html.
+
+Primero traemos el plugin creando una constante al inicio del proyecto.
+````js
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+````
+
+Luego creamos nuestra nueva regla para usar el loader.
+````js
+{
+   test: /\.html$/,
+   use: {
+      loader: 'html-loader'
+   }
+}
+````
+
+Ahora creamos el apartado de ***plugins***, que será un array, al primer nivel de nuestro objeto de configuración *(al nivel de entry, output, resolve y module)*.
+````js
+plugins: [
+        new HtmlWebpackPlugin({
+            template: './public/index.html',
+            filename: './index.html'    
+        })
+    ]
+````
+
+Finalmente para probar nuestra aplicación tenemos que crear los siguiente scripts en nuestro archivo ***package.json***
+````js
+"scripts": {
+    "dev": "webpack serve --mode development",
+    "build": "webpack --mode production"
+  },
+````
+
+Con estos scripts podemos probar el primero y así iniciar nuestro servidor de desarrollo.
