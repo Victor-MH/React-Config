@@ -168,9 +168,9 @@ plugins: [
 Finalmente para probar nuestra aplicación tenemos que crear los siguiente scripts en nuestro archivo ***package.json***
 ````js
 "scripts": {
-    "dev": "webpack serve --mode development",
-    "build": "webpack --mode production"
-  },
+   "dev": "webpack serve --mode development",
+   "build": "webpack --mode production"
+},
 ````
 
 Con estos scripts podemos probar el primero y así iniciar nuestro servidor de desarrollo.
@@ -242,4 +242,102 @@ body {
 Es importante **importar** este archivo en nuestro ***index.js*** para que se utilicen los estilos que creamos. Esto lo hacemos de la siguiente manera:
 ````js
 import './styles/global.scss';
+````
+
+
+
+## Sección VII - Optimización de Webpack
+
+Casi tenemos listo nuestro proyecto, aún podemos optimizar nuestra configuración para tenerlo listo al momento de generar el build para producción.
+
+Para esto necesitaremos las siguientes dependencias para desarrollo con la bandera ***-D***:
+
+**dependencias:**
+
+- css-minimizer-webpack-plugin
+- terser-webpack-plugin
+- clean-webpack-plugin
+````
+npm i css-minimizer-webpack-plugin terser-webpack-plugin clean-webpack-plugin -D
+````
+Esta vez vamos a crear un nuevo archivo de configuración para webpack ***webpack.config.dev.js*** de esta forma separamos las configuraciones para desarrollo y las de producción.
+
+En el archivo de configuración para desarrollo vamos a copiar todo  lo que ya tenemos en nuestro primer archivo de configuración, *sin eliminar el otro archivo*, y agregaremos lo siguiente:
+
+````js
+resolve: {...},
+mode: 'development',
+module: {...},
+...
+//al final, después de *plugins*
+devServer: {
+   contentBase: path.join(__dirname, 'dist'),
+   compress: true,
+   port: 8080
+}
+````
+Ahora en el archivo de configuración para producción traemos los paquetes que instalamos antes:
+````js
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const { cleanWebpackPlugin } = require('clean-webpack-plugin');
+````
+También agregamos el parámetro **mode** de la siguiente manera:
+````js
+resolve: {...},
+mode: 'production',
+module: {...},
+````
+
+En el objeto ***output*** agregamos el parámetro **publicPath**
+````js
+output: {
+   path: path.resolve(__dirname, 'dist'),
+   filename: 'bundle.js',
+   publicPath: '/',
+}
+````
+
+También vamos a modificar el objeto ***resolve*** de la siguiente manera:
+````js
+resolve: {
+   extensions: ['.js', '.jsx'],
+   alias: {
+      '@components': path.resolve(__dirname, 'src/components/'),
+      '@styles': path.resolve(__dirname, 'src/styles')
+   }
+}
+````
+
+En la sección de plugins agregamos **CleanWebpackPlugin**
+````js
+plugins: [
+   new HtmlWebpackPlugin({
+      template: './public/index.html',
+      filename: './index.html'    
+   }),
+   new MiniCssExtractPlugin({
+      filename: '[name].css'
+   }),
+   new CleanWebpackPlugin(),
+]
+````
+
+Finalmente agregamos el parámetro **optimization** después de **plugins** que será el siguiente objeto:
+````js
+optimization: {
+   minimize: true,
+   minimizer: [
+      new CssMinimizerPlugin(),
+      new TerserPlugin(),
+   ]
+}
+````
+
+Por último vamos a modificar los scripts que creamos en ***package.json*** antes para que utilicemos los archivos de configuración correspondientes a cada modo.
+````js
+"scripts": {
+   "dev": "webpack serve --config webpack.config.dev.js",
+   "build": "webpack --config webpack.config.js"
+},
 ````
