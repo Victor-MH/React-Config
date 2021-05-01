@@ -9,5 +9,8 @@
   "keywords": [],
   "author": "Victor Muñoz <victormu497@gmail.com>",
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
 }
