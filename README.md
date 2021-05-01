@@ -58,11 +58,67 @@ npm i @babel/core babel-loader @babel/preset-env @babel/preset-react -D
 ````
 Ahora creamos nuestro archivo de configuración llamado ***.babelrc*** en la raíz del proyecto. Dentro de este archivo configuramos los presets:
 
-````
+````javascript
 {
     "presets": [
         "@babel/preset-env",   // Nos permite compilar todo tipo de js desde ecmascript 5
         "babel/preset-react"   // Nos ayuda con la sintaxis de react
     ]
+}
+````
+
+
+## Sección IV - Webpack
+
+Webpack es una herramienta que nos va a ayudar a preparar nuestro código para enviarlo a producción, conocido como un module bundler.
+
+Los **module bundlers** nos permiten trabajar con javascript, archivos estáticos, imagenes, fuentes entre otros.
+
+Para esto necesitaremos las siguientes dependencias para desarrollo con la bandera ***-D***:
+
+**dependencias:**
+
+- webpack
+- webpack-cli 
+- webpack-dev-server
+
+````
+npm i webpack webpack-cli webpack-dev-server -D
+````
+Ahora creamos nuestro archivo de configuración llamado ***webpack.config.js*** en la raíz del proyecto. Dentro de este archivo configuramos lo siguiente:
+
+***entry:*** este es el archivo de entrada de nuestro proyecto que como mencionamos antes es ***/src/index.js***
+
+***output:*** aquí configuramos donde queremos obtener el resultado de nuestro bundle, es decir el contenido que enviaremos a producción.
+
+***resolve:*** aquí configuramos las extensiones que tiene nuestro proyecto que al ser de react usaremos **.js** y **.jsx**
+
+***module:*** en este apartado configuramos las "reglas" del proyecto para cada tipo de archivo, iniciamos con **.js** y **.jsx**
+
+Finalmente nuestro archivo de configuración inicial para webpack queda de la siguiente manera:
+
+````js
+const path = require('path');
+
+module.exports = {
+    entry: './src/index.js',
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'bundle.js'
+    },
+    resolve: {
+        extensions: ['.js', '.jsx']
+    },
+    module: {
+        rules: [
+            {
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader'
+                }
+            }
+        ]
+    }
 }
 ````
