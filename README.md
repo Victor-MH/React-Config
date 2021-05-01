@@ -16,6 +16,7 @@ También creamos los primeros archivos y estructura de carpetas.
    2. /public/index.html
 
 
+
 ## Sección II - Inicialización 2 
 ### React
 
@@ -39,3 +40,29 @@ En nuestro archivo /public/index.html solo hay que agregar un ***<div/>*** con e
 
 Para no subir la carpeta ***node_modules/*** a nuestro repositorio de git *(cosa que nunca debemos hacer)* creamos un archivo ***.gitignore*** en la raíz del proyecto.
 Podemos utilizar el siguiente [***template***](https://gist.github.com/gndx/747a8913d12e96ff8374e2125efde544).
+
+
+
+## Sección III - Babel
+
+Usamos babel para Babel hacer que nuestro código JavaScript sea compatible con todos los navegadores. Para esto necesitaremos las siguientes dependencias para desarrollo con la bandera ***-D***:
+
+**dependencias:**
+
+- @babel/core 
+- babel-loader 
+- @babel/preset-env 
+- @babel/preset-react
+````
+npm i @babel/core babel-loader @babel/preset-env @babel/preset-react -D
+````
+Ahora creamos nuestro archivo de configuración llamado ***.babelrc*** en la raíz del proyecto. Dentro de este archivo configuramos los presets:
+
+````
+{
+    "presets": [
+        "@babel/preset-env",   // Nos permite compilar todo tipo de js desde ecmascript 5
+        "babel/preset-react"   // Nos ayuda con la sintaxis de react
+    ]
+}
+````

@@ -1,0 +1,6 @@
+{
+    "presets": [
+        "@babel/preset-env",   // Nos permite compilar todo tipo de js desde ecmascript 5
+        "babel/preset-react"   // Nos ayuda con la sintaxis de react
+    ]
+}
