@@ -174,3 +174,72 @@ Finalmente para probar nuestra aplicación tenemos que crear los siguiente scrip
 ````
 
 Con estos scripts podemos probar el primero y así iniciar nuestro servidor de desarrollo.
+
+
+
+## Sección VI - Estilos CSS y SASS con Webpack
+
+Algo que no puede faltar en nuestros proyectos son los estilos, para estos usaremos sass que nos facilitará trabajar con css dentro de nuestro proyecto.
+
+Para esto necesitaremos las siguientes dependencias para desarrollo con la bandera ***-D***:
+
+**dependencias:**
+
+- mini-css-extract-plugin
+- css-loader
+- sass
+- sass-loader 
+
+````
+npm i mini-css-extract-plugin css-loader sass sass-loader -D
+````
+En nuestro archivo de configuración ***webpack.config.js*** vamos a configurar los loaders y plugins para hacer uso de sass.
+
+Primero traemos el plugin creando una constante al inicio del proyecto.
+````js
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+````
+
+Luego creamos nuestra nueva regla para usar el loader.
+````js
+{
+   test: /\.(s*)css$/,
+      use: [
+           {
+              loader: MiniCssExtractPlugin.loader,
+           },
+           'css-loader',
+           'sass-loader'
+     ]
+}
+````
+
+Ahora creamos el apartado de ***plugins***, que será un array, al primer nivel de nuestro objeto de configuración *(al nivel de entry, output, resolve y module)*.
+Anexando este plugin al de html que instanciamos anteriormente.
+````js
+plugins: [
+        new MiniCssExtractPlugin({
+            filename: '[name].css'
+        })
+    ]
+````
+
+Ahora pasamos a crear la estructura de carpetas donde incluiremos los estilos de nuestro proyecto.
+- /src/styles
+- /src/styles/components
+
+También creamos un archivo ***globals.scss*** dentro de **/src/styles*** para probar nuestra app y donde incluiremos los estilos globales de la aplicación.
+````css
+$base-color: #C6538C;
+$color: rgba(black, 0.88);
+
+body {
+    background-color: $base-color;
+    color: $color;
+}
+````
+
+Es importante **importar** este archivo en nuestro ***index.js*** para que se utilicen los estilos que creamos. Esto lo hacemos de la siguiente manera:
+````js
+import './styles/global.scss';
+````
